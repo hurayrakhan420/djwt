@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
-
+from datetime import datetime
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import get_user_model
 
@@ -22,16 +22,19 @@ def generate_jwt_token(request):
     try:
         if user:
             refresh = RefreshToken.for_user(user)
+            print(refresh.access_token['exp'])
             return Response({
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
+                'exp': datetime.fromtimestamp(refresh.access_token['exp'])
             })
         else:
             user = User.objects.create_user(email=email)
             refresh = RefreshToken.for_user(user)
             return Response({
                 'refresh': str(refresh),
-                'access': str(refresh.access_token)
+                'access': str(refresh.access_token),
+                'exp': refresh.access_token['exp']
             })
     except Exception as e:
         print(e)
