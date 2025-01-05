@@ -45,4 +45,4 @@ def generate_jwt_token(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticatedWithJWT])
 def hello_world(request):
-    return Response({'message': 'Hello, World!'})
+    return Response({'message': 'hurayra khan!'})
